@@ -63,7 +63,7 @@ CREATE TABLE branch_supplier (
 
 DESCRIBE branch_supplier;
 
--- brach_id 1
+-- branch_id 1
 
 INSERT INTO employee VALUES(100,"David","Wallace","1967-11-17","M",250000,NULL,NULL);
 INSERT INTO branch VALUES(1,"Corporate",100,"2006-02-09");
@@ -75,6 +75,7 @@ WHERE emp_id=100;
 INSERT INTO employee VALUES(101,"Jan","Levinson","1961-05-11","F",110000,100,1);
 
 -- branch_id 2
+
 INSERT INTO employee VALUES(102,"Michael","Scott","1964-03-15","M",75000,NULL,NULL);
 -- mistakenly super_id was inputed NULL. That's why used update
 UPDATE employee
@@ -94,6 +95,7 @@ INSERT INTO employee VALUES(105,"Stanley","Hudson","1958-02-19","M",69000,102,2)
 
 
 -- brach_id 3
+
 INSERT INTO employee VALUES(106,"Josh","Porter","1969-09-05","M",78000,100,NULL);
 INSERT INTO branch VALUES(3,"Stamford",106,"1998-02-13");
 
@@ -105,13 +107,8 @@ INSERT INTO employee VALUES(107,"Andy","Bernard","1973-07-22","M",65000,106,3);
 INSERT INTO employee VALUES(108,"Jim","Halpert","1978-10-01","M",71000,106,3);
 
 
-SELECT * FROM employee;
-SELECT * FROM branch;
-SELECT * FROM branch_supplier;
-SELECT * FROM client;
-SELECT * FROM works_with;
-
 -- branch_supplier
+
 INSERT INTO branch_supplier VALUES(2,'hAMMER MILL','Paper');
 INSERT INTO branch_supplier VALUES(2,'Uni-ball','Writing Utensils');
 INSERT INTO branch_supplier VALUES(3,'Patriot Paper','Paper');
@@ -140,6 +137,226 @@ INSERT INTO works_with VALUES(105,404,33000);
 INSERT INTO works_with VALUES(107,405,26000);
 INSERT INTO works_with VALUES(102,406,15000);
 INSERT INTO works_with VALUES(105,406,130000);
+
+
+
+-- Basic Queries
+
+SELECT * FROM employee;
+SELECT * FROM branch;
+SELECT * FROM branch_supplier;
+SELECT * FROM client;
+SELECT * FROM works_with;
+
+
+-- employee table
+
+SELECT * 
+FROM employee
+ORDER BY salary DESC;
+
+SELECT * 
+FROM employee
+ORDER BY sex,first_name,last_name;
+
+SELECT * 
+FROM employee
+LIMIT 3;
+
+SELECT * 
+FROM employee
+ORDER BY salary DESC
+LIMIT 3;
+
+SELECT * 
+FROM employee
+ORDER BY branch_id;
+
+SELECT * 
+FROM employee
+ORDER BY super_id;
+
+SELECT * 
+FROM employee
+ORDER BY birth_date;
+
+SELECT * 
+FROM employee
+WHERE sex='F';
+
+SELECT *
+FROM employee
+WHERE sex='M' AND salary>=70000;
+
+
+SELECT first_name,last_name
+FROM employee;
+
+SELECT first_name AS forename,last_name AS surname
+FROM employee;
+
+
+SELECT DISTINCT sex
+FROM employee;
+
+SELECT DISTINCT branch_id
+FROM employee;
+
+SELECT COUNT(emp_id)
+FROM employee;
+
+SELECT COUNT(emp_id)
+FROM employee
+WHERE sex='F';
+
+
+SELECT COUNT(emp_id)
+FROM employee
+WHERE sex='M' AND salary>=75000;
+
+SELECT COUNT(emp_id)
+FROM employee
+WHERE sex='F' AND birth_date > '1970-01-01';
+
+SELECT AVG(salary)
+FROM employee;
+
+
+SELECT AVG(salary)
+FROM employee
+WHERE sex='M';
+
+SELECT SUM(salary)
+FROM employee;
+
+SELECT COUNT(sex),sex
+FROM employee
+GROUP BY sex;
+
+
+-- works_With table
+
+SELECT SUM(total_sales),emp_id
+FROM works_with
+GROUP BY emp_id;
+
+
+SELECT SUM(total_sales),client_id
+FROM works_with
+GROUP BY client_id;
+
+SELECT SUM(total_sales),client_id
+FROM works_with
+GROUP BY client_id
+ORDER BY SUM(total_sales) DESC;
+
+-- WILD CARD
+-- client table
+
+SELECT * FROM client;
+
+SELECT *
+FROM client
+WHERE client_name LIKE '%LLC';
+ 
+
+SELECT *
+FROM client
+WHERE client_name LIKE '%school';
+
+SELECT *
+FROM client
+WHERE client_name LIKE '%paper';
+
+-- branch_supplier table
+
+SELECT * 
+FROM branch_supplier
+WHERE supplier_name LIKE '% LABEL%';
+
+
+
+-- employee table
+
+SELECT * 
+FROM employee
+WHERE birth_date LIKE'____-02%';
+
+
+-- client table
+
+SELECT * 
+FROM client
+WHERE client_name LIKE '%school%';
+
+
+-- union
+
+SELECT first_name
+FROM employee
+UNION 
+SELECT branch_name
+FROM branch;
+
+SELECT first_name
+FROM employee
+UNION 
+SELECT branch_name
+FROM branch
+UNION 
+SELECT client_name
+FROM client;
+
+SELECT first_name AS company_names
+FROM employee
+UNION 
+SELECT branch_name
+FROM branch
+UNION 
+SELECT client_name
+FROM client;
+
+SELECT client_name
+FROM client
+UNION 
+SELECT supplier_name
+FROM branch_supplier;
+
+
+SELECT client_name,branch_id
+FROM client
+UNION 
+SELECT supplier_name,branch_id
+FROM branch_supplier;
+
+
+
+SELECT client_name,client.branch_id
+FROM client
+UNION 
+SELECT supplier_name,branch_supplier.branch_id
+FROM branch_supplier;
+
+
+
+SELECT salary
+FROM employee
+UNION
+SELECT total_sales
+FROM works_with;
+
+
+
+-- join
+
+INSERT INTO branch VALUES(4,'Buffalo',NULL,NULL);
+
+SELECT * FROM branch;
+
+SELECT employee.emp_id,employee.first_name,branch.branch_name
+FROM employee
+JOIN branch
+ON employee.emp_id = branch.mgr_id;
 
 
 
