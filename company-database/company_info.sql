@@ -356,16 +356,52 @@ SELECT * FROM branch;
 SELECT employee.emp_id,employee.first_name,branch.branch_name
 FROM employee
 JOIN branch
-ON employee.emp_id = branch.mgr_id;
+ON employee.emp_id = branch.mgr_id; 
+
+SELECT employee.emp_id,employee.first_name,branch.branch_name
+FROM employee
+LEFT JOIN branch
+ON employee.emp_id = branch.mgr_id; 
+
+
+SELECT employee.emp_id,employee.first_name,branch.branch_name
+FROM employee
+RIGHT JOIN branch
+ON employee.emp_id = branch.mgr_id; 
+
+
+
+-- Nested Queries
+
+SELECT employee.first_name,employee.last_name
+FROM employee
+WHERE employee.emp_id IN(
+	SELECT works_with.emp_id
+    FROM works_with
+    WHERE works_with.total_Sales > 30000
+);
 
 
 
 
+-- IN and = opreates in a same way
+SELECT client.client_name
+FROM client
+WHERE client.branch_id =(
+	SELECT branch.branch_id
+	FROM branch
+	WHERE branch.mgr_id= 102
+    LIMIT 1  -- if 102 had multiple branch,we got several values,that's why using limit
+);
 
 
-
-
-
+SELECT client.client_name
+FROM client
+WHERE client.branch_id IN (
+	SELECT branch.branch_id
+	FROM branch
+	WHERE branch.mgr_id= 102
+);
 
 
 
