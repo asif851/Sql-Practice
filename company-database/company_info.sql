@@ -404,5 +404,20 @@ WHERE client.branch_id IN (
 );
 
 
+-- DELETE 
+-- Table was created usingON DELETE SET NULL
 
+DELETE FROM employee
+WHERE emp_id= 102;
+
+SELECT * FROM branch;
+SELECT * FROM employee;
+
+-- Table was created using DELETE CASCADE
+
+DELETE FROM branch
+WHERE branch_id = 2;
+
+SELECT * FROM branch_supplier;
+SELECT * FROM branch;
 
